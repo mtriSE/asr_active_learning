@@ -96,6 +96,6 @@ if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
         files=$(find feats/round*/ -name sample.csv | head -n 5 | tr '\n' ' ')
         python -m utils.merge_dataset "${data_output_dir}/train_nodev_${mode}_round_${round}" $files
     else 
-        python -m asr_evaluate.active_learning.dataio.exporter -from aal -to kaldi -src "${feats_dir}" -dst "${data_output_dir}/train_nodev_${mode}_round_${round}"
+        python -m asr_evaluate.dataio.exporter -from aal -to kaldi -src "${feats_dir}" -dst "${data_output_dir}/train_nodev_${mode}_round_${round}"
     fi
 fi

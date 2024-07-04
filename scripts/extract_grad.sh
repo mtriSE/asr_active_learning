@@ -61,6 +61,8 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     _opts+="--report_dir ${feats_dir}"
     _opts+="--report_name ${report_name} "
 
+    echo $_opts
+
     if [ ! -f ${feats_dir}/feats.done ]; then 
         # Load report checkpoint if any 
         if ls ${feats_dir}/*${report_name}*.csv 1> /dev/null 2>&1; then
@@ -70,7 +72,7 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
             done 
         fi
         
-        python -m asr_evaluate.active_learning.statistics.conformer_lb_grad_decompose_faster ${_opts}
+        python -m asr_evaluate.statistics.conformer_lb_grad_decompose_faster ${_opts}
         touch ${feats_dir}/feats.done 
     else
         log Features exist. Skipping...
@@ -87,7 +89,7 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
         _opts+="--k ${k} "
         _opts+="--seed ${seed} "
 
-        python -m asr_evaluate.active_learning.kmedoids_real ${_opts}
+        python -m asr_evaluate.kmedoids_real ${_opts}
 
         touch ${feats_dir}/sampling.done
     else
@@ -105,6 +107,6 @@ if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
         files=$(find feats/round*/pseudo_cdist_dtw -name sample.csv | head -n 5 | tr '\n' ' ')
         python -m utils.merge_dataset "${data_output_dir}/train_nodev_${mode}_round_${round}" $files
     else 
-        python -m asr_evaluate.active_learning.dataio.exporter -from aal -to kaldi -src "${feats_dir}/" -dst "${data_output_dir}/train_nodev_${mode}_round_${round}"
+        python -m asr_evaluate.dataio.exporter -from aal -to kaldi -src "${feats_dir}/" -dst "${data_output_dir}/train_nodev_${mode}_round_${round}"
     fi
 fi
