@@ -106,7 +106,9 @@ class WavDataset(Dataset):
                 # e.g: sox "A117016535#10028#9005550453037837.wav" -t wav - trim 0.89 =1.47|
                 if path_info.endswith('|'):
                     # NOTE (Duy): Do not support path that contains space
+                    print(path_info)
                     path_ele = path_info.split(' ')
+                    print(path_ele)
                     path = path_ele[1]
                     start = float(path_ele[-2])
                     end = float(path_ele[-1].replace('|', '').replace('=', ''))
